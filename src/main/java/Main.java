@@ -2,12 +2,16 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.mongodb.client.model.Filters.eq;
 
 
 public class Main {
@@ -21,17 +25,17 @@ public class Main {
         MongoCollection col2 = database.getCollection("Motocykle");
         MongoCollection col3 = database.getCollection("Ciężarowe");
 
-//        Document osobowy1 = new Document("nazwa", "osobowy")
-//                .append("Rodzaj", new Document("Osobówka", "Fiat"))
-//                .append("moc", "140KM");
-//
-//        Document osobowy2 = new Document("nazwa", "osobowy")
-//                .append("Rodzaj", new Document("Osobówka", "BMW"))
-//                .append("moc", "320KM");
-//
-//        Document osobowy3 = new Document("nazwa", "osobowy")
-//                .append("Rodzaj", new Document("Osobówka", "Mazda"))
-//                .append("moc", "160KM");
+        Document osobowy1 = new Document("nazwa", "osobowy")
+                .append("Rodzaj", new Document("Osobówka", "Fiat"))
+                .append("moc", "140KM");
+
+        Document osobowy2 = new Document("nazwa", "osobowy")
+                .append("Rodzaj", new Document("Osobówka", "BMW"))
+                .append("moc", "320KM");
+
+        Document osobowy3 = new Document("nazwa", "osobowy")
+                .append("Rodzaj", new Document("Osobówka", "Mazda"))
+                .append("moc", "160KM");
         Document motocykl1 = new Document("id", 1)
                 .append("marka", "BMW")
                 .append("model", "moto32")
@@ -81,6 +85,10 @@ public class Main {
         ciezarowki.add(ciezarowka3);
 
         col3.insertMany(ciezarowki);
+        Bson query = eq("id", 2);
+        DeleteResult result = col2.deleteOne(query);
+        System.out.println("Deleted document count: " + result.getDeletedCount());
+
 
         Logger logger = LoggerFactory.getLogger("MyApp");
         logger.error("Logging an Error");
